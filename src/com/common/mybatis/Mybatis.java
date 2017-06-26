@@ -1,0 +1,174 @@
+package com.common.mybatis;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+import org.testng.log4testng.Logger;
+
+import com.common.tag.PageIterator;
+
+
+/**
+ * Mybatis封装
+ * @author Liu Jinglei 
+ *
+ */
+@Repository("mybatisTemplate")
+public class Mybatis<T> extends SqlSessionDaoSupport{
+	private Logger logger = Logger.getLogger(Mybatis.class);
+
+	private SqlSessionTemplate  readTemplate;
+	// 翻页设置，每页显示行数
+	@Value("${pagesize}")
+	private int pageSize;
+
+	@Autowired  
+	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory){  
+		super.setSqlSessionFactory(sqlSessionFactory);  
+	}
+	
+	@Autowired
+	private void setReadTemplate(@Qualifier("readSqlMapClient")  SqlSessionTemplate readTemplate) {
+		this.readTemplate = readTemplate;
+	}
+
+	 
+	private SqlSessionTemplate getReadTemplate() {
+		return readTemplate;
+	}
+
+	
+	public T queryOne(String statement,Object parameter){
+		T a = readTemplate.selectOne(statement, parameter);
+		return a;
+	}
+	
+	public String queryOne1(String statement,Object parameter){
+		String str = readTemplate.selectOne(statement, parameter);
+		return str;
+	}
+	
+	
+	
+	public List<T> queryList(String statement,Object parameter){
+		return readTemplate.selectList(statement, parameter);
+	}
+	
+
+	
+	public int count(String statement,Object parameter){
+		int count = readTemplate.selectOne(statement, parameter);
+		return count;
+	}
+	/**
+	 * 像数据库内插入一条数据
+	 * @param statement
+	 * @param parameter 无参数时为null
+	 * @return
+	 */
+	public int save(String statement,Object parameter){
+		if(parameter == null){
+			return readTemplate.insert(statement);
+		}else{
+			return readTemplate.insert(statement, parameter);
+		}
+	}
+	
+	int batchSize = 10;
+	public int saveBatch(String statement,Object parameter){
+		int rows = 0;
+		if(parameter instanceof List){
+			List list = (List) parameter;
+			if(list.size()>batchSize){
+				List batchList = new ArrayList();
+				for(int i = 0;i<list.size();i++){
+					Object obj = list.get(i);
+					batchList.add(obj);
+					if(batchList.size() >= batchSize){
+						int row = readTemplate.insert(statement, batchList);
+						if(row>0){
+							rows += row; 
+						}
+						batchList.clear();
+					}
+				}
+				if(!batchList.isEmpty()){
+					int row = readTemplate.insert(statement, batchList);
+					if(row>0){
+						rows += row; 
+					}
+					batchList.clear();
+				}
+			}else{
+				rows = readTemplate.insert(statement, parameter);
+			}
+		}else{
+			rows = readTemplate.insert(statement, parameter);
+		}
+		return rows;
+	}
+	
+	/**
+	 * 更新数据库内的数据
+	 * @param statement
+	 * @param parameter 无参数时为null
+	 */
+	public int modify(String statement,Object parameter){
+		if(parameter == null){
+			return readTemplate.update(statement);
+		}else{
+			return readTemplate.update(statement, parameter);
+		}
+	}
+	
+	/**
+	 * 物理删除某条记录
+	 * @param statement
+	 * @param parameter 无参数时为null
+	 * @return
+	 */
+	public int remove(String statement,Object parameter){
+		if(parameter == null){
+			return readTemplate.delete(statement);
+		}else{
+			return readTemplate.delete(statement, parameter);
+		}
+	}
+	/**
+	 * 使用默认页面大小分页
+	 * @param statement
+	 * @param parameter
+	 * @param start
+	 * @return
+	 */
+	public PageIterator getDefaultSizePageList(String statement,Object parameter,int start){
+		return this.getPageListByLimit(statement, parameter, start, pageSize);
+	}
+	/**
+	 * 自定义页面大小分页
+	 * @param statement
+	 * @param parameter
+	 * @param start
+	 * @param limit  每页显示条数
+	 * @return
+	 */
+	public PageIterator getPageListByLimit(String statement,Object parameter,int start,int limit){
+		 RowBounds rb = new RowBounds(start,limit);
+		List<T> list = readTemplate.selectList(statement, parameter, rb);
+		PageIterator pageinfo = null;
+		int totalCount = this.count(statement+"_count",parameter);
+
+		pageinfo = new PageIterator(totalCount, list, start, limit, true);
+		return pageinfo;
+		
+	}
+}

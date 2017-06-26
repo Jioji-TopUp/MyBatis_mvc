@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:hdp="http://www.springframework.org/schema/hadoop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/task 
+		http://www.springframework.org/schema/task/spring-task-3.2.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd   
+     	http://www.springframework.org/schema/hadoop http://www.springframework.org/schema/hadoop/spring-hadoop.xsd">
+
+	<context:component-scan base-package="com.**">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<bean id="placeholderConfig"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:spring/spring.prop</value>
+		</property>
+	</bean>
+
+	<task:annotation-driven /><!-- 定时器开关 -->
+
+	<!-- <bean id="UserInit" class="com.sinocbd.user.controller.UserController"></bean> 
+		<task:scheduled-tasks> <task:scheduled ref="UserInit" method="run" fixedRate=1000*60*2 
+		/> </task:scheduled-tasks> -->
+
+	<!-- mongo username="${mongo.root}" password="${mongo.pwd}" -->
+	<mongo:db-factory id="mongoDbFactoryZyky" host="${mongo.host}"
+		port="${mongo.port}" dbname="${mongo.dbname}" />
+	<bean id="mappingContextZyky"
+		class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
+	<bean id="mappingMongoConverterZyky"
+		class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactoryZyky" />
+		<constructor-arg name="mappingContext" ref="mappingContextZyky" />
+		<property name="typeMapper" ref="defaultMongoTypeMapperZyky" />
+	</bean>
+
+	<bean id="defaultMongoTypeMapperZyky"
+		class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+		<constructor-arg name="typeKey">
+			<null />
+		</constructor-arg>
+	</bean>
+	<bean id="mongoTemplateZyky" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactoryZyky" />
+		<constructor-arg name="mongoConverter" ref="mappingMongoConverterZyky" />
+	</bean>
+
+
+	<!-- 配置mysql数据源 -->
+	<bean id="readDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="${mysql.url}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.pwd}" />
+
+		<property name="initialSize" value="${mysql.initialSize}" />
+		<property name="maxActive" value="${mysql.maxActive}" />
+		<property name="minIdle" value="${mysql.minIdle}" />
+		<property name="maxIdle" value="${mysql.maxIdle}" />
+		<property name="logAbandoned" value="${mysql.logAbandoned}" />
+		<property name="maxWait" value="${mysql.maxWait}" />
+
+		<property name="testWhileIdle" value="${mysql.testWhileIdle}" />
+		<property name="validationQuery" value="${mysql.validationQuery}" />
+		<property name="validationQueryTimeout" value="${mysql.validationQueryTimeout}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${mysql.timeBetweenEvictionRunsMillis}" />
+		<property name="numTestsPerEvictionRun" value="${mysql.numTestsPerEvictionRun}" />
+		<property name="removeAbandoned" value="${mysql.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${mysql.removeAbandonedTimeout}" />
+	</bean>
+	<bean id="writeDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="${mysql.url}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.pwd}" />
+
+		<property name="initialSize" value="${mysql.initialSize}" />
+		<property name="maxActive" value="${mysql.maxActive}" />
+		<property name="minIdle" value="${mysql.minIdle}" />
+		<property name="maxIdle" value="${mysql.maxIdle}" />
+		<property name="logAbandoned" value="${mysql.logAbandoned}" />
+		<property name="maxWait" value="${mysql.maxWait}" />
+
+		<property name="testWhileIdle" value="${mysql.testWhileIdle}" />
+		<property name="validationQuery" value="${mysql.validationQuery}" />
+		<property name="validationQueryTimeout" value="${mysql.validationQueryTimeout}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${mysql.timeBetweenEvictionRunsMillis}" />
+		<property name="numTestsPerEvictionRun" value="${mysql.numTestsPerEvictionRun}" />
+		<property name="removeAbandoned" value="${mysql.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${mysql.removeAbandonedTimeout}" />
+	</bean>
+	<!-- SqlMapClient配置 -->
+	<!-- <bean id="commonSqlMapClient" abstract="true"> <property name="configLocation" 
+		value="classpath:mybatis-conf.xml" /> </bean> -->
+	<!-- <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="readDataSource" /> </bean> <tx:annotation-driven 
+		transaction-manager="txManager" proxy-target-class="true"/> -->
+	<!-- 创建SqlMapClient对象 parent="commonSqlMapClient" -->
+	<bean id="readSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="readDataSource" />
+
+
+		<property name="mapperLocations" value="classpath:com/scbd/**/*.map.xml" />
+
+
+		<property name="typeAliases">
+			<array>
+				<value>com.scbd.companyinformation.form.CompanyInfoForm</value>	
+				<value>com.scbd.newsinfo.form.NewsInfoForm</value>	
+				<value>com.scbd.boardinfo.form.BoardInfoForm</value>
+				<value>com.scbd.staffinfo.form.StaffInfoForm</value>
+				<value>com.scbd.supplier_probleminfo.form.Supplier_problemInfoForm</value>
+				<value>com.scbd.oeminfo.form.OemInfoForm</value>
+				<value>com.scbd.company.form.CompanyForm</value>	
+				<value>com.scbd.dataimport.form.DataColumnAndValueForm</value>
+				<value>com.scbd.dataimport.form.CompanyDataForm</value>
+				<value>com.scbd.dataimport.form.DataColumnAndValueForm</value>
+				<value>com.scbd.dataimport.form.CompanyFilesForm</value>
+				<value>com.scbd.pythonconfig.form.Python_ConditionForm</value>
+				<value>com.scbd.login.form.LoginForm</value>
+				<value>com.scbd.data.form.DataForm</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.scbd.**.Dao" />
+		<property name="sqlSessionTemplateBeanName" value="readSqlMapClient" />
+	</bean>
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="readDataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- <bean id="writeSqlMapClient" class="org.mybatis.spring.SqlSessionTemplate" 
+		parent="commonSqlMapClient"> <constructor-arg index="1" ref="sqlSessionFactory"></constructor-arg> 
+		<property name="dataSource" ref="writeDataSource" /> </bean> -->
+	<!-- mybatis spring sqlSessionTemplate,使用时直接让spring注入即可 -->
+	<bean id="readSqlMapClient" class="org.mybatis.spring.SqlSessionTemplate"
+		scope="prototype">
+		<constructor-arg index="0" ref="readSqlSessionFactory"></constructor-arg>
+	</bean>
+
+
+	<!-- 配置hbase -->
+	<hdp:configuration resources="classpath:spring/hbase-site.xml" />
+	<hdp:hbase-configuration configuration-ref="hadoopConfiguration" />
+	<hdp:file-system id="hadoopFile" configuration-ref="hadoopConfiguration" />
+	<bean id="hbaseTemplate" class="org.springframework.data.hadoop.hbase.HbaseTemplate">
+		<property name="configuration" ref="hbaseConfiguration" />
+		<property name="encoding" value="UTF-8" />
+	</bean>
+	
+
+</beans>

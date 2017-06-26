@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="StaffInfo">
+
+	<select id="StaffInfobycompanyId" parameterType="int" resultType="StaffInfo">
+		select * from staff where company_id=#{company_id} order by id desc
+	</select>
+	
+	<select id="StaffInfobycompanyId_count" parameterType="int" resultType="int">
+		select count(*) from staff where company_id=#{company_id} order by id desc
+	</select>
+	
+	
+		<select id="QueryStaffInfobystaffname" parameterType="string" resultType="StaffInfo" >
+		select * from staff where company_id=#{company_id} and staff_name like CONCAT(CONCAT('%', #{staff_name}), '%');
+	</select>
+	
+		<select id="QueryStaffInfobystaffname_count" parameterType="string" resultType="integer" >
+		select count(*) from staff where company_id=#{company_id} and staff_name like CONCAT(CONCAT('%', #{staff_name}), '%');
+	</select>
+
+</mapper>

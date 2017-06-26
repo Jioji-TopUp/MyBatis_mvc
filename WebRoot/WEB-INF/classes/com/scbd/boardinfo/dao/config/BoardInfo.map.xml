@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardInfo">
+
+	<select id="BoardInfobycompanyId" parameterType="int" resultType="BoardInfo" >
+		select * from board where company_id=#{company_id} order by id desc
+	</select>
+	
+	<select id="BoardInfobycompanyId_count" parameterType="int" resultType="integer">
+		select count(*) from board where company_id=#{company_id} order by id desc
+	</select>
+	
+	
+	
+		<select id="QueryBoardInfobyboardname" parameterType="string" resultType="BoardInfo" >
+		select * from board where company_id=#{company_id} and board_name like CONCAT(CONCAT('%', #{board_name}), '%');
+	</select>
+	
+		<select id="QueryBoardInfobyboardname_count" parameterType="string" resultType="integer" >
+		select count(*) from board where company_id=#{company_id} and board_name like CONCAT(CONCAT('%', #{board_name}), '%');
+	</select>
+	
+</mapper>

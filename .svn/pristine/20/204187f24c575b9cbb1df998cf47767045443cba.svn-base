@@ -1,0 +1,25 @@
+mongo.host=192.168.3.59
+mongo.port=27017
+mongo.dbname=zykyImportData
+
+mysql.url=jdbc:mysql://192.168.3.59:3306/zykyDemo?useUnicode=true&characterEncoding=UTF-8
+mysql.username=hadoop
+mysql.pwd=hadoop
+mysql.initialSize=5
+mysql.maxActive=30
+mysql.minIdle=3
+mysql.maxIdle=20
+mysql.logAbandoned=true
+mysql.maxWait=6000
+mysql.testWhileIdle=true
+mysql.validationQuery=SELECT NOW() FROM DUAL
+mysql.validationQueryTimeout=1
+mysql.timeBetweenEvictionRunsMillis=30000
+mysql.numTestsPerEvictionRun=20
+mysql.removeAbandoned=true
+mysql.removeAbandonedTimeout=180
+
+
+pagesize=5
+
+

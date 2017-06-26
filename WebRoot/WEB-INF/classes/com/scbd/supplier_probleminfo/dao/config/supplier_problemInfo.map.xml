@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Supplier_problemInfo">
+
+	<select id="supplier_problemInfobycompanyId" parameterType="int" resultType="Supplier_problemInfo" >
+		select * from supplier_problem where company_id=#{company_id} order by id desc
+	</select>
+	
+	<select id="supplier_problemInfobycompanyId_count" parameterType="int" resultType="integer">
+		select count(*) from supplier_problem where company_id=#{company_id} order by id desc
+	</select>
+	
+	
+</mapper>

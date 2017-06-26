@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Company">
+
+<select id="QueryCompany" parameterType="int" resultType="Company" >
+		select * from company 
+	</select>
+	
+	<select id="QueryCompany_count" parameterType="int" resultType="integer">
+		select count(*) from company 
+	</select>
+	
+	
+	<select id="QueryCompanybyId" parameterType="int" resultType="Company" >
+		select * from company where id=#{id}
+	</select>
+	
+		<select id="QueryCompanybycompanyname" parameterType="string" resultType="Company" >
+		select * from company where company_name like CONCAT(CONCAT('%', #{company_name}), '%');
+	</select>
+	
+		<select id="QueryCompanybycompanyname_count" parameterType="string" resultType="integer" >
+		select count(*) from company where company_name like CONCAT(CONCAT('%', #{company_name}), '%');
+	</select>
+	
+	
+		<select id="QueryCompanybyrelationid" parameterType="string" resultType="Company" >
+		select * from company where relation_id=#{relation_id}
+	</select>
+	
+	
+	
+	
+  <select id="companyname" parameterType="string" resultType="Company" >
+		select company_name  from company 
+	</select>
+	
+<insert id="insertcompanyname" parameterType="Company">
+		insert into
+		company(company_name)
+		values
+		(#{company_name})
+	</insert>
+	
+	<delete id="deletecompanyname" parameterType="int">
+		delete from company where id=#{id}
+	</delete>
+	<update id="updatecompanyname" parameterType="Company">
+	
+	update company set company_name=#{company_name} where id=#{id}
+
+	</update>
+	
+	
+	
+	
+	
+</mapper>

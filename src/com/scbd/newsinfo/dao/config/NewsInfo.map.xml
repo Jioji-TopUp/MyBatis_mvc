@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="NewsInfo">
+
+<select id="NewsInfobycompanyId" parameterType="int" resultType="NewsInfo" >
+		select * from news where company_id=#{company_id} order by id desc
+	</select>
+	
+	<select id="NewsInfobycompanyId_count" parameterType="int" resultType="integer">
+		select count(*) from news where company_id=#{company_id} order by id desc
+	</select>
+	
+	
+</mapper>

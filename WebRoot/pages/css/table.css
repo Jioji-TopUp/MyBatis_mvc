@@ -1,0 +1,40 @@
+	 td{
+		text-align:center;
+		width:212px;	
+		padding:15px;
+		
+		
+		
+		
+	}
+	
+
+	
+	th{
+		padding:15px;
+		width:212px;
+		/*word-break:keep-all;*/
+		
+		border-bottom:1px solid #444444;
+		border-left:1px solid #FFFFFF;
+		
+		color:#FFFFFF;
+		text-align: center;
+		background-color:#39AEF5;	
+		
+		border-top-left-radius: 5px; 
+		border-top-right-radius: 5px;
+	}
+	
+	tr{
+		border-bottom:1px solid #DDDDDD;
+		width:212px;
+		text-align: center;
+	}
+	
+table{
+	min-width:1000px;
+	max-width:3000px;
+	background-color:#FFFFFF;
+	
+}

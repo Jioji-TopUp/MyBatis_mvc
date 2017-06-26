@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="zykyDemo"
+  id="myeclipse.1481014871646"
+  context-root="/zykyDemo"
+  j2ee-spec="6.0"
+  archive="zykyDemo.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

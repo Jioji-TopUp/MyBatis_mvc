@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- jqGrid组件基础样式包-必要 -->
+<link rel="stylesheet" href="res/jqgrid/css/ui.jqgrid.css" />
+
+<!-- jqGrid主题包-非必要 -->
+<!-- 在jqgrid/css/css这个目录下还有其他的主题包，可以尝试更换看效果 -->
+<link rel="stylesheet"
+	href="res/jqgrid/css/css/redmond/jquery-ui-1.8.16.custom.css" />
+
+<!-- jquery插件包-必要 -->
+<!-- 这个是所有jquery插件的基础，首先第一个引入 -->
+<script type="text/javascript" src="res/js/jquery-1.10.2.js"></script>
+
+<!-- jqGrid插件包-必要 -->
+<script type="text/javascript" src="res/jqgrid/js/jquery.jqGrid.src.js"></script>
+
+<!-- jqGrid插件的多语言包-非必要 -->
+<!-- 在jqgrid/js/i18n下还有其他的多语言包，可以尝试更换看效果 -->
+<script type="text/javascript" src="res/jqgrid/js/i18n/grid.locale-cn.js"></script>
+<title>http://blog.mn886.net/jqGrid</title>
+
+<script>
+$(function(){pageInit();});
+function pageInit(){
+  jQuery("#list10").jqGrid(
+          {
+            url :'res/data/JSONData.json',
+            datatype : "json",
+            colNames : [ 'ID', '创建日期', '表名', '备注'],
+            colModel : [ 
+                         {name : 'id',index : 'id',width : 55}, 
+                         {name : 'invdate',index : 'invdate',width : 90}, 
+                         {name : 'name',index : 'name',width : 100}, 
+                         {name : 'amount',index : 'amount',width : 80,align : "right"},
+                       ],
+            rowNum : 10,
+            rowList : [ 10, 20, 30 ],
+            pager : '#pager10',
+            sortname : 'id',
+            viewrecords : true,
+            sortorder : "desc",
+            multiselect : false,
+            caption : "Invoice Header",
+            onSelectRow : function(ids) {
+              if (ids == null) {
+                ids = 0;
+                if (jQuery("#list10_d").jqGrid('getGridParam',
+                    'records') > 0) {
+                  jQuery("#list10_d").jqGrid(
+                      'setGridParam',
+                      {
+                        url : ctx+"/SubGrid?q=1&id="
+                            + ids,
+                        page : 1
+                      });
+                  jQuery("#list10_d").jqGrid('setCaption',
+                      "Invoice Detail: " + ids).trigger(
+                      'reloadGrid');
+                }
+              } else {
+                jQuery("#list10_d").jqGrid('setGridParam', {
+                  url : ctx+"/SubGrid?q=1&id=" + ids,
+                  page : 1
+                });
+                jQuery("#list10_d").jqGrid('setCaption',
+                    "Invoice Detail: " + ids).trigger(
+                    'reloadGrid');
+              }
+            }
+          });
+  jQuery("#list10").jqGrid('navGrid', '#pager10', {
+    add : false,
+    edit : false,
+    del : false
+  });
+  
+  
+  jQuery("#list10_d").jqGrid({
+    height : 100,
+    url : 'data/JSONData1.json',
+    datatype : "json",
+    colNames : [ 'No', 'Item', 'Qty', 'Unit', 'Line Total' ],
+    colModel : [ 
+                 {name : 'num',index : 'num',width : 55}, 
+                 {name : 'item',index : 'item',width : 180}, 
+                 {name : 'qty',index : 'qty',width : 80,align : "right"}, 
+                 {name : 'unit',index : 'unit',width : 80,align : "right"}, 
+                 {name : 'linetotal',index : 'linetotal',width : 80,align : "right",sortable : false,search : false} 
+               ],
+    rowNum : 5,
+    rowList : [ 5, 10, 20 ],
+    pager : '#pager10_d',
+    sortname : 'item',
+    viewrecords : true,
+    sortorder : "asc",
+    multiselect : true,
+    caption : "Invoice Detail"
+  }).navGrid('#pager10_d', {
+    add : false,
+    edit : false,
+    del : false
+  });
+  jQuery("#ms1").click(function() {
+    var s;
+    s = jQuery("#list10_d").jqGrid('getGridParam', 'selarrrow');
+    alert(s);
+  });
+}
+</script>
+</head>
+<body>
+
+	<table id="list10"></table>
+	<div id="pager10"></div>
+	<br /> Invoice Detail
+	<table id="list10_d"></table>
+	<div id="pager10_d"></div>
+	<a href="javascript:void(0)" id="ms1">Get Selected id's</a>
+	<br> 以上为创建jqGrid的简单例子。想了解全功能api，请移步
+	<a href="http://blog.mn886.net/jqGrid">http://blog.mn886.net/jqGrid</a>
+</body>
+</html>

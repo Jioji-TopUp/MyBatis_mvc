@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="data">
+
+<select id="displayData" resultType="data">
+select * from t_product 
+</select>
+
+
+<select id="getData" parameterType="string" resultType="data">
+select * from t_product where login_username=#{login_username} and login_password=#{login_password}
+
+
+</select>
+
+
+<insert id="addData" parameterType="string" >
+insert  t_product(login_username,login_password)values(#{login_username},#{login_password})
+
+
+</insert>
+
+<delete id="deleteData" parameterType="string" >
+delete  from t_product where login_username =#{login_username}and login_password=#{login_password}
+
+
+</delete>
+
+<update id="updateData" parameterType="string" >
+update t_product set login_password=#{login_password} where login_username =#{login_username}
+
+
+</update>
+
+<select id="getdisplayDataList" parameterType="int" resultType="data">
+select * from t_product 
+
+
+</select>
+<select id="getdisplayDataList_count" parameterType="int" resultType="integer">
+ select count(*) from t_product
+
+
+</select>
+
+
+	
+</mapper>
+

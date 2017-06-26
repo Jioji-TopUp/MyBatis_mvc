@@ -1,0 +1,18 @@
+#Mon Apr 10 15:14:28 CST 2017
+eclipse.preferences.version=1
+encoding//WebRoot/pageForTest/echarts/test.jsp=UTF-8
+encoding//WebRoot/pages/company/companyDetails.jsp=UTF-8
+encoding//WebRoot/pages/fault/FaultPicList.jsp=UTF-8
+encoding//WebRoot/pages/login/main.jsp=UTF-8
+encoding//WebRoot/pages/product/productbasedetail.jsp=UTF-8
+encoding//WebRoot/pages/product/qrcodebatch.jsp=UTF-8
+encoding//WebRoot/pages/python/pythonconfigAdd.jsp=UTF-8
+encoding//WebRoot/pages/test/ConstructionInfo.jsp=UTF-8
+encoding//WebRoot/pages/test/ShowAllTables.jsp=UTF-8
+encoding//WebRoot/pages/test/gongyingshang.jsp=UTF-8
+encoding//WebRoot/pages/test/neo4j.jsp=UTF-8
+encoding//WebRoot/pages/test/rentalinfo.jsp=UTF-8
+encoding//WebRoot/pages/test/shuxing.jsp=UTF-8
+encoding//WebRoot/pages/user/userMenu.jsp=UTF-8
+encoding//WebRoot/res/data/JSONData.json=UTF-8
+encoding/<project>=UTF-8

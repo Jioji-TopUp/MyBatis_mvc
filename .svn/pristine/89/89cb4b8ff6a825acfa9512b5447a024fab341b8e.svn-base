@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<initInfo>
+	<EmailInit name="EmailInit">
+		<username>13671704332@163.com</username>
+		<password>xzliulu19840901</password>
+		<serverHost>smtp.163.com</serverHost>
+		<serverPort>25</serverPort>
+		<fromAddress>13671704332@163.com</fromAddress>
+	</EmailInit>
+</initInfo>

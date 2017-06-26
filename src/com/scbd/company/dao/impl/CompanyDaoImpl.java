@@ -1,0 +1,72 @@
+package com.scbd.company.dao.impl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.common.mybatis.Mybatis;
+import com.common.tag.PageIterator;
+import com.scbd.company.dao.CompanyDao;
+import com.scbd.company.form.CompanyForm;
+
+
+
+@Repository("CompanyDaoImpl")
+public class CompanyDaoImpl extends Mybatis<CompanyForm> implements CompanyDao {
+
+	@Override
+	public PageIterator QueryCompany(int start, int limit) {
+		return this.getPageListByLimit("Company.QueryCompany",null, start, limit);
+	}
+
+	@Override
+	public CompanyForm QueryCompanybyId(int id) {
+		
+		return this.queryOne("Company.QueryCompanybyId", id);
+	}
+
+	@Override
+	public List<CompanyForm> QueryCompanybyrelationid(String relation_id) {
+		return this.queryList("Company.QueryCompanybyrelationid", relation_id);
+	}
+	@Override
+	public List<CompanyForm> companyname() {
+		return this.queryList("Company.companyname", null);
+	}
+	
+	@Override
+	public PageIterator QueryCompanybycompanyname(String company_name,
+			int start, int limit) {
+		
+		return this.getPageListByLimit("Company.QueryCompanybycompanyname",company_name, start, limit);
+	}
+
+	@Override
+	public int AddcompanyInfo(CompanyForm companyInfo) {
+		return this.save("Company.insertcompanyname", companyInfo);
+		
+	}
+
+	@Override
+	public int DeletecompanyInfo(int id) {
+		
+		return this.remove("Company.deletecompanyname",id);
+	}
+
+	@Override
+	public int updatecompanyInfo(String company_name,int id) {
+		
+		CompanyForm cf=new CompanyForm();
+		cf.setCompany_name(company_name);
+		cf.setId(id);
+		return this.modify("Company.updatecompanyname", cf);
+	}
+
+	
+	
+	
+
+
+	
+
+}
